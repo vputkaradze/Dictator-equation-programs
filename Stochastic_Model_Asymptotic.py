@@ -110,49 +110,67 @@ for j in range(ncurves):
         v_sol2[:,m,j] = result[:, 0]
         e_sol2[:,m,j] = result[:, 1]
 
-
+ic_colors_v = ['r','g','m','y']
 
 plt.figure(9)
 plt.clf()
 fig,ax = plt.subplots()
-
+line_label = []
+labels = []
 #Plot stochastic lines first since they are most messy
 for j in range(ncurves):
-    line_v  = ax.plot(tspan_short,v_sol[:,0:nshow,j],'r-',alpha=1,label='v',linewidth=1)
-
+    col_val = ic_colors_v[j]+'-'
+    line_v = ax.plot(tspan_short,v_sol[:,0:nshow,j],col_val,alpha=1,label='v',linewidth=1)
+    line_label.append(line_v[0])
+    ax.scatter(0*v0_arr[j],v0_arr[j],color=ic_colors_v[j] ,s=30)
+    labels.append('v(t) realizations: v(0)='+str(v0_arr[j]))
 for j in range(ncurves):
     line_e  = ax.plot(tspan_short,e_sol[:,0:nshow,j],'b-',alpha=1,label='e',linewidth=1)
 
-ax.scatter(0*v0_arr,v0_arr,color='red',s=30)
-ax.legend([line_e[0], line_v[0]],['e (3 realizations)','v (3 realizations)'])
+line_label.append(line_e[0])
+labels.append('corresponding e(t)')
+
+ax.legend(line_label,labels)
 ax.plot(tspan_short,0*tspan_short,'k--',linewidth=1)
 ax.set_xlabel('Months')
 ax.set_ylabel('e(t) and v(t)')
-#ax.set_xrange([0,100])
+ax.set_xlim([-5,140])
 ax.set_title('Simulation results, short-term: realizations: e(0)=0')
-#ax.set_ylim(np.min(v0_arr)-0.1,np.max(v0_arr)+0.1)
-plt.savefig('Short term simulations realizations.pdf')
+ax.set_ylim(np.min(v0_arr)-10,np.max(v0_arr)+1)
+plt.savefig('Short_term_simulations_realizations.pdf')
 
 
 plt.figure(13)
 plt.clf()
 fig,ax = plt.subplots()
+line_label = []
+labels = []
 
 #Plot stochastic lines first since they are most messy
 for j in range(ncurves):
-    line_v  = ax.plot(tspan_long,v_sol2[:,0:nshow,j],'r-',alpha=1,label='v',linewidth=1)
+    col_val = ic_colors_v[j]+'-'
+    line_v  = ax.plot(tspan_long,v_sol2[:,0:nshow,j],col_val,alpha=1,label='v',linewidth=1)
+    line_label.append(line_v[0])
+    ax.scatter(0*v0_arr[j],v0_arr[j],color=ic_colors_v[j] ,s=30)
+    labels.append('v(t) realizations: v(0)='+str(v0_arr[j]))
+    ax.scatter(0*v0_arr[j],v0_arr[j],color= ic_colors_v[j] ,s=30)
+
 
 for j in range(ncurves):
     line_e  = ax.plot(tspan_long,e_sol2[:,0:nshow,j],'b-',alpha=1,label='e',linewidth=1)
 
-ax.scatter(0*v0_arr,v0_arr,color='red',s=30)
-ax.legend([line_e[0], line_v[0]],['e (3 realizations)','v (3 realizations)'])
+line_label.append(line_e[0])
+labels.append('corresponding e(t)')
+
+ax.legend(line_label,labels)
+
 ax.plot(tspan_long,0*tspan_long,'k--',linewidth=1)
 ax.set_xlabel('Months')
 ax.set_ylabel('e(t) and v(t)')
 ax.set_title('Simulation results, short-term: realizations e(0)=-0.1v(0)')
-#ax.set_ylim(np.min(v0_arr)-0.1,np.max(v0_arr)+0.1)
-plt.savefig('Long term simulations realizations alternative e.pdf')
+ax.set_ylim(np.min(v0_arr)-14,np.max(v0_arr)+1)
+ax.set_xlim(-2,145)
+plt.savefig('Long_term_simulations_realizations_alternative_e.pdf')
 
 
 
