@@ -103,6 +103,11 @@ e=np.zeros((num_pts_sim,nsims))
 v=np.zeros((num_pts_sim,nsims))
 B = np.diag([sigma, 0])
 
+r_col=['r','b','m']
+line_label = []
+labels = []
+
+
 for j in range (0,nsims):
     #start at the asymptotic solution at t=0 (beginning of Stalin's reign)
     v0 = v_asymptotic_params(0,tshift,mu)[0]
@@ -116,24 +121,42 @@ for j in range (0,nsims):
 
 tspan_years = tspan/12 #span in years
 
+ic_colors_v = ['r','y','m']
+
 plt.figure(2)
 plt.clf()
 fig,ax = plt.subplots()
-line_v  = ax.plot(tspan_years+np.min(Years_All),v[:,0:nsims],'r-',alpha=1,label='v',linewidth=1)
+for j in range(nsims):
+    col_val = ic_colors_v[j]+'-'
+    line_v  = ax.plot(tspan_years+np.min(Years_All),v[:,j],col_val,alpha=1,label='v',linewidth=1)
+    line_label.append(line_v[0])
+    labels.append('v(t) realization '+str(j+1))
+
 line_e  = ax.plot(tspan_years+np.min(Years_All),e[:,0:nsims],'b-',alpha=1,label='e',linewidth=1)
+line_label.append(line_e[0])
+labels.append('corresponding e(t)')
+ax.legend(line_label,labels)
+
 line_historic = ax.plot(Years, diff,'gx-',label="Historical data")
+line_label.append(line_historic[0])
+labels.append('Historic data')
+
 line_fit = ax.plot(Years,exp_fit,'ko-',label='Asymptotic solution fit')
+line_label.append(line_fit[0])
+labels.append('Asymptotic fit')
+
 #ax.legend([line_v, line_e, line_historic, line_fit],["True discrepancy (v)","Advisor informaiton (e)","Historic data", "Asymptotic fit"])
 #ax.legend([line_v, line_e])
-e_line = mlines.Line2D([], [], color='blue', label='e')
-v_line = mlines.Line2D([], [], color='red', label='v')
-legends = ax.get_legend_handles_labels()
+#e_line = mlines.Line2D([], [], color='blue', label='e')
+#v_line = mlines.Line2D([], [], color='red', label='v')
+#legends = ax.get_legend_handles_labels()
 #ax.legend(handler_map={e_line: HandlerLine2D(numpoints=4)})
-ax.legend([line_e[0], line_v[0], line_historic[0],line_fit[0]],['e (3 realizations)','v (3 realizations)','Historic data','Asymptotic fit'])
+#ax.legend([line_e[0], line_v[0], line_historic[0],line_fit[0]],['e (3 realizations)','v (3 realizations)','Historic data','Asymptotic fit'])
+ax.legend(line_label,labels)
 # fig.legend()
 ax.set_xlabel('Year')
 ax.set_ylabel('Difference in estimates')
 ax.set_title('Results for grain production in USSR, 1928-1940')
 #plt.legend(['Stochastic realization','Difference','Asymptotic solution fit','Historic data'])
-plt.savefig('Wheat production variance.pdf')
+plt.savefig('Wheat_production_variance.pdf')
 
